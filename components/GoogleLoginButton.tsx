@@ -1,5 +1,6 @@
 import { FC, ReactNode } from "react";
 import { Button } from "./ui/button";
+import { signIn } from "next-auth/react";
 
 interface GoogleLoginButtonProps {
     children: ReactNode;
@@ -8,7 +9,11 @@ interface GoogleLoginButtonProps {
 const GoogleLoginButton: FC<GoogleLoginButtonProps> = ({ children }) => {
 
     function loginWithGoogle() {
-        console.log("Login with Google");
+
+        // Change URL for production
+        signIn("google", {
+            callbackUrl: "http://localhost:3000/admin"
+        })
     }
 
     return (

@@ -45,13 +45,11 @@ const LoginForm = () => {
             router.refresh();
             router.push("/admin");
         } else {
-
             toast({
                 title: "Erreur",
                 description: "Une erreur s'est produite !",
                 variant: "destructive",
             })
-
         }
     }
 

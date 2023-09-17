@@ -1,4 +1,5 @@
 import { NextAuthOptions } from "next-auth"
+import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { db } from "@/lib/db";
@@ -16,6 +17,10 @@ export const authOptions: NextAuthOptions = {
         error: "/login"
     },
     providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!
+        }),
         CredentialsProvider({
             name: "Credentials",
             credentials: {
@@ -35,11 +40,13 @@ export const authOptions: NextAuthOptions = {
                     throw new Error("User doesn't exist");
                 }
 
-                const passwordMatch = await compare(credentials.password, existingUser.password);
-
-                if (!passwordMatch) {
-                    throw new Error("Invalid password");
+                if (existingUser.password) {
+                    const passwordMatch = await compare(credentials.password, existingUser.password);
+                    if (!passwordMatch) {
+                        throw new Error("Invalid password");
+                    }
                 }
+
                 return {
                     id: `${existingUser.id}`,
                     email: existingUser.email,
@@ -54,7 +61,8 @@ export const authOptions: NextAuthOptions = {
             if (user) {
                 return {
                     ...token,
-                    username: user.username
+                    username: user.username,
+                    id: user.id
                 }
             }
             return token
@@ -65,7 +73,8 @@ export const authOptions: NextAuthOptions = {
                 ...session,
                 user: {
                     ...session.user,
-                    username: token.username
+                    username: token.username,
+                    id: token.id
                 }
             }
         },

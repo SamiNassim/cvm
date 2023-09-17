@@ -6,7 +6,7 @@ const AdminDashboard = async () => {
     console.log(session);
 
     if (session?.user) {
-        return <h2 className="text-2xl">Admin page - Welcome back {session?.user.username}</h2>
+        return <h2 className="text-2xl">Admin page - Welcome back {session?.user.username || session.user.name}</h2>
     }
 
     return (
