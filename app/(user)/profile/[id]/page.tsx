@@ -1,0 +1,77 @@
+
+/* const userInfo = async () => {
+    const result = await fetch('http://localhost:3000/api/profile', { method: 'GET' });
+
+    return result;
+} */
+
+// Params doc : https://nextjs.org/docs/app/api-reference/functions/generate-static-params
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
+import { authOptions } from "@/lib/auth";
+import { db } from "@/lib/db";
+import { Mail } from "lucide-react";
+import { getServerSession } from "next-auth";
+import Link from "next/link";
+
+const ProfilePage = async ({ params }: { params: { id: string } }) => {
+
+
+    const userInfo = await db.user.findFirst({
+        where: { id: params.id },
+        include: {
+            profile: true,
+        },
+    })
+
+
+    function getAge(dateString: string) {
+        var today = new Date();
+        var birthDate = new Date(dateString);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
+
+    console.log(userInfo?.profile);
+    const session = await getServerSession(authOptions);
+    const userAge = getAge(userInfo?.profile.dob!);
+
+    return (
+        <>
+            <div className="w-full h-full mt-10 p-10">
+                <div className="flex flex-row items-center justify-between">
+                    <div className="flex items-center gap-6">
+                        <Avatar className="w-20 h-20">
+                            <AvatarImage src={userInfo?.profile.imageUrl!} />
+                            <AvatarFallback>{userInfo?.username}</AvatarFallback>
+                        </Avatar>
+                        <h1 className="text-2xl">{userInfo?.username}</h1>
+                        {session?.user.id !== params.id && (<Link href={`/messages/${userInfo?.id}`}><Mail /></Link>)}
+                    </div>
+                    <div>
+                        <h2 className="text-sm">{userInfo?.profile.gender}</h2>
+                        <h2 className="text-sm">{userAge} ans</h2>
+                        <h2 className="text-sm">{userInfo?.profile.relation}</h2>
+                    </div>
+                </div>
+                <Separator className="my-4 w-full" />
+                <div className="w-full">
+                    <div className="flex flex-col">
+                        <h2>{userInfo?.profile.country}</h2>
+                        <h2>{userInfo?.profile.region}</h2>
+                    </div>
+                </div>
+            </div>
+            <div className="flex w-full h-full justify-center items-center">
+                {userInfo?.profile.bio!}
+            </div>
+        </>
+    )
+}
+
+export default ProfilePage;

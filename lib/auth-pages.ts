@@ -4,7 +4,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { db } from "@/lib/db";
 import { compare } from "bcrypt";
-import { Profile, User } from "@prisma/client";
 
 
 export const authOptions: NextAuthOptions = {
@@ -52,35 +51,30 @@ export const authOptions: NextAuthOptions = {
                     id: `${existingUser.id}`,
                     email: existingUser.email,
                     username: existingUser.username,
-                    onboarded: existingUser.onboarded,
                 }
             }
         })
     ],
     callbacks: {
         async jwt({ token, user }) {
-            /* console.log("jwtlog", token, user); */
+            /*             console.log("jwtlog", token, user); */
             if (user) {
-                const u = user as unknown as User
-                const p = user as unknown as Profile
                 return {
                     ...token,
-                    username: u.username,
-                    id: u.id,
-                    onboarded: u.onboarded,
-                    imageUrl: p.imageUrl
+                    username: user.username,
+                    id: user.id
                 }
             }
             return token
         },
         async session({ session, token }) {
-            /* console.log("sessionlog", session, token); */
+            /*             console.log("sessionlog", session, token); */
             return {
                 ...session,
                 user: {
                     ...session.user,
                     username: token.username,
-                    id: token.id,
+                    id: token.id
                 }
             }
         },

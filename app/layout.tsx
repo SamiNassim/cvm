@@ -3,7 +3,9 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Toaster } from '@/components/ui/toaster'
-import { Providers } from './providers'
+import { Provider } from '@/components/providers/session-provider'
+import { SocketProvider } from '@/components/providers/socket-provider'
+import { QueryProvider } from '@/components/providers/query-provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,13 +22,17 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className={inter.className}>
-        <Providers>
-          <main className='h-screen flex flex-col justify-center items-center'>
-            <Navbar />
-            {children}
-          </main>
-          <Toaster />
-        </Providers>
+        <Provider>
+          <SocketProvider>
+            <QueryProvider>
+              <main className='h-screen flex flex-col justify-center items-center'>
+                <Navbar />
+                {children}
+              </main>
+              <Toaster />
+            </QueryProvider>
+          </SocketProvider>
+        </Provider>
       </body>
     </html>
   )

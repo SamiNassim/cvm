@@ -43,7 +43,7 @@ const LoginForm = () => {
 
         if (signInData?.error === null) {
             router.refresh();
-            router.push("/admin");
+            router.push("/home");
         } else {
             toast({
                 title: "Erreur",

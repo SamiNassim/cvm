@@ -50,25 +50,45 @@ enum UserRole {
 model User {
   id            String    @id @unique @default(cuid())
   role          UserRole  @default(MEMBER)
-  name          String?
   username      String?   @unique
   password      String?
+  email         String    @unique
+  emailVerified DateTime?
+  onboarded     Boolean   @default(false)
+  isBanned      Boolean   @default(false)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  email         String?   @unique
-  emailVerified DateTime?
-  onboarding    Boolean   @default(false)
-  isBanned      Boolean   @default(false)
-  image         String?   @db.Text
-  country       String?
-  region        String?
-  gender        String?
-  dob           String?
-  relation      String?
-  bio           String?   @db.Text
+
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  conversationsInitiated Conversation[] @relation("UserOne")
+  conversationsReceived  Conversation[] @relation("UserTwo")
 
   accounts Account[]
   sessions Session[]
+
+  message Message[]
+
+  @@index([profileId])
+}
+
+model Profile {
+  id       String  @id @default(uuid())
+  userId   String  @unique
+  name     String?
+  imageUrl String  @db.Text
+  country  String?
+  region   String?
+  gender   String?
+  dob      String?
+  relation String?
+  bio      String? @db.Text
+
+  users User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -77,4 +97,39 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Message {
+  id      String  @id @default(uuid())
+  content String  @db.Text
+  fileUrl String? @db.Text
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  deleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([conversationId])
+}
+
+model Conversation {
+  id String @id @default(uuid())
+
+  userOneId String
+  userOne   User   @relation("UserOne", fields: [userOneId], references: [id], onDelete: Cascade)
+
+  userTwoId String
+  userTwo   User   @relation("UserTwo", fields: [userTwoId], references: [id], onDelete: Cascade)
+
+  messages Message[]
+
+  @@unique([userOneId, userTwoId])
+  @@index([userTwoId])
 }

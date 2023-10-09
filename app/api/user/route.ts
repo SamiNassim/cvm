@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { hash } from "bcrypt";
 import * as z from "zod";
+import { createId } from '@paralleldrive/cuid2';
 
 // Define a schema for input validation
 
@@ -15,6 +16,9 @@ const userSchema = z.object({
 })
 
 export async function POST(req: Request) {
+
+    const cuid = createId();
+
     try {
         const body = await req.json();
         const { email, username, password } = userSchema.parse(body);
@@ -40,9 +44,16 @@ export async function POST(req: Request) {
         const hashedPassword = await hash(password, 12);
         const newUser = await db.user.create({
             data: {
+                id: cuid,
                 username,
                 email,
-                password: hashedPassword
+                password: hashedPassword,
+                profile: {
+                    create: {
+                        userId: cuid,
+                        imageUrl: "",
+                    }
+                }
             }
         });
 
@@ -52,6 +63,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ user: rest, message: "Utilisateur créé !" }, { status: 201 });
     }
     catch (error) {
+        console.log("[API_USER]", error)
         return NextResponse.json({ message: "Une erreur s'est produite" }, { status: 500 });
     }
 }

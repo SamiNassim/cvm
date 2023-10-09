@@ -1,17 +1,17 @@
-import ProfileEditForm from "@/components/form/ProfileEditForm";
+import ProfileCreateForm from "@/components/form/ProfileCreateForm";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 
-const UpdateProfile = async () => {
+const CreateProfile = async () => {
 
     const session = await getServerSession(authOptions);
     console.log(session);
 
     return (
         <div className="w-full">
-            <ProfileEditForm />
+            <ProfileCreateForm />
         </div>
     )
 }
 
-export default UpdateProfile;
+export default CreateProfile;

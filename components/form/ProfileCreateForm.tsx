@@ -1,13 +1,25 @@
 "use client"
 
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useSession } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import FileUpload from "@/components/FileUpload";
+
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage
+} from "../ui/form";
 import { Input } from "@/components/ui/input"
 import { Button } from "../ui/button";
-import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
-import { useState } from "react";
+import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn } from "@/lib/utils";
@@ -15,39 +27,26 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import { Textarea } from "../ui/textarea";
-import { Label } from "../ui/label";
-import { useRouter } from "next/navigation";
 import { toast } from "../ui/use-toast";
-import { useSession } from "next-auth/react";
+
+
 
 const formSchema = z.object({
-    username: z.string().min(1, "Veuillez entrer un nom d'utilisateur"),
-    email: z.string(),
     gender: z.string().min(1, "Veuillez choisir votre genre"),
     country: z.string().min(1, "Veuillez choisir votre pays"),
     region: z.string().min(1, "Veuillez choisir une région"),
     dob: z.date(),
     relation: z.string(),
     bio: z.string().max(500),
-    image: z.string(),
-    password: z.
-        string()
-        .min(1, "Entrez votre mot de passe")
-        .min(8, "Le mot de passe doit avoir 8 caractères minimum"),
-    confirmPassword: z.string().min(1, "Mot de passe requis")
-})
-    .refine((data) => data.password === data.confirmPassword, {
-        path: ["confirmPassword"],
-        message: "Les mots de passes ne correspondent pas"
-    });
+    imageUrl: z.string(),
+});
 
 
 
-function ProfileForm() {
+function ProfileCreateForm() {
 
     const [country, setCountry] = useState('');
     const router = useRouter();
-
     const { data: session } = useSession();
 
 
@@ -55,16 +54,13 @@ function ProfileForm() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "",
-            email: "",
-            password: "",
             gender: "",
             country: "",
             region: "",
             dob: new Date,
             relation: "",
             bio: "",
-            image: ""
+            imageUrl: ""
         },
     })
 
@@ -76,24 +72,22 @@ function ProfileForm() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                username: values.username,
-                email: session?.user.email,
-                password: values.password,
+                name: session?.user.username,
                 gender: values.gender,
                 country: values.country,
                 region: values.region,
                 dob: values.dob,
                 relation: values.relation,
                 bio: values.bio,
-                image: values.image,
+                imageUrl: values.imageUrl,
             })
         })
 
         if (response.ok) {
-            router.push("/")
+            router.push("/home")
             toast({
                 title: "Notification",
-                description: "Profil modifié avec succès !",
+                description: "Profil créé avec succès !",
             })
         } else {
             toast({
@@ -112,63 +106,6 @@ function ProfileForm() {
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <div className="mt-[200px]">
-                    <FormField
-                        control={form.control}
-                        name="username"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Nom d'utilisateur</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Nom" {...field} />
-                                </FormControl>
-                                <FormDescription>
-                                    Votre nom d'utilisateur qui sera affiché.
-                                </FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="email@email.com" disabled/*  value={session?.user.email!}  */  {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Mot de passe</FormLabel>
-                                <FormControl>
-                                    <Input type="password" placeholder="Mot de passe" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="confirmPassword"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Répétez le mot de passe</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Répétez le mot de passe" type="password" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-
-                        )}
-                    />
                     <FormField
                         control={form.control}
                         name="gender"
@@ -232,6 +169,9 @@ function ProfileForm() {
                                     <PopoverContent className="w-auto p-0" align="start">
                                         <Calendar
                                             mode="single"
+                                            defaultMonth={new Date(2005, 8)}
+                                            /* captionLayout="dropdown"
+                                            fromYear={1925} toYear={2025} */
                                             selected={field.value}
                                             onSelect={field.onChange}
                                             disabled={(date) =>
@@ -337,14 +277,30 @@ function ProfileForm() {
                         )}
                     />
                 </div>
-                <div className="grid w-full max-w-sm items-center gap-1.5">
+                <FormField
+                    control={form.control}
+                    name="imageUrl"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormControl>
+                                <FileUpload
+                                    endpoint="userImage"
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+
+                />
+                {/* <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="picture">Picture</Label>
-                    <Input id="picture" type="file" />
-                </div>
+                    <Input id="picture" type="file" onChange={(e) => setFile(e.target.files?.[0])} />
+                </div> */}
                 <Button type="submit">Submit</Button>
             </form>
         </Form>
     )
 }
 
-export default ProfileForm;
+export default ProfileCreateForm;

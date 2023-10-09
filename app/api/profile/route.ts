@@ -6,16 +6,13 @@ import { NextResponse } from "next/server";
 import * as z from "zod";
 
 const profileSchema = z.object({
-    username: z.string().min(1, "Veuillez entrer un nom d'utilisateur"),
-    email: z.string(),
-    password: z.string(),
     gender: z.string(),
     country: z.string().min(1, "Veuillez choisir votre pays"),
     region: z.string().min(1, "Veuillez choisir une région"),
     dob: z.string(),
     relation: z.string(),
     bio: z.string().max(500),
-    image: z.string()
+    imageUrl: z.string()
 
 });
 
@@ -26,47 +23,57 @@ export async function PUT(req: Request) {
     try {
         const body = await req.json();
         const {
-            username,
-            email,
-            password,
             gender,
             country,
             region,
             dob,
             relation,
             bio,
-            image } = profileSchema.parse(body);
+            imageUrl } = profileSchema.parse(body);
 
-        /*         // Check if username already exists
-                const existingUserByUsername = await db.user.findUnique({
-                    where: { username: username }
-                });
-        
-                if (existingUserByUsername) {
-                    return NextResponse.json({ user: null, message: "Ce nom d'utilisateur est déjà pris" }, { status: 409 })
-                } */
+        /* const hashedPassword = await hash(password, 12); */
 
-        const hashedPassword = await hash(password, 12);
-
-        const upsertUser = await db.user.update({
+        const existingProfile = await db.profile.findFirst({
             where: {
-                email: email
+                userId: session?.user.id
+            }
+        })
+
+        if (!existingProfile) {
+            const createProfile = await db.profile.create({
+                data: {
+                    userId: session?.user.id!,
+                    name: session?.user.username,
+                    gender,
+                    country,
+                    region,
+                    dob,
+                    relation,
+                    bio,
+                    imageUrl
+                }
+
+            })
+            return NextResponse.json({ createProfile, message: "Profile créé !" }, { status: 201 })
+        }
+
+        const upsertUser = await db.profile.update({
+            where: {
+                userId: session?.user.id
             },
             data: {
-                username,
-                password: hashedPassword,
-                email,
+                name: session?.user.username,
                 gender,
                 country,
                 region,
                 dob,
                 relation,
                 bio,
-                image
+                imageUrl
             },
         })
 
-        return NextResponse.json({ upsertUser, message: "Utilisateur modifié !" }, { status: 201 });
+        return NextResponse.json({ upsertUser, message: "Profile modifié !" }, { status: 201 });
 
     } catch (error) {
         console.log("[ROUTE_PUT]", error);
@@ -74,3 +81,23 @@ export async function PUT(req: Request) {
     }
 
 }
+
+export async function GET(req: Request) {
+
+    try {
+
+        const getProfileById = await db.profile.findMany({
+            orderBy:
+            {
+                createdAt: 'desc',
+            },
+            take: 10,
+        })
+
+        return NextResponse.json({ getProfileById }, { status: 200 })
+    } catch (error) {
+        console.log("[ROUTE_GETBYID]", error);
+        return NextResponse.json({ message: "Une erreur s'est produite" }, { status: 500 });
+    }
+}
+
