@@ -5,7 +5,9 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { db } from "@/lib/db";
 import { compare } from "bcrypt";
 import { Profile, User } from "@prisma/client";
+import { createId } from '@paralleldrive/cuid2';
 
+const cuid = createId();
 
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(db),
@@ -20,7 +22,25 @@ export const authOptions: NextAuthOptions = {
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID!,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET!
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+            authorization: {
+                params: { scope: "openid email profile" }
+            },
+            profile(profile) {
+                return {
+                    id: profile.sub,
+                    username: profile.name,
+                    email: profile.email,
+                    image: profile.picture,
+                    onboarded: false,
+                    profile: {
+                        create: {
+                            userId: profile.sub,
+                            imageUrl: profile.picture,
+                        }
+                    },
+                }
+            }
         }),
         CredentialsProvider({
             name: "Credentials",
@@ -53,6 +73,8 @@ export const authOptions: NextAuthOptions = {
                     email: existingUser.email,
                     username: existingUser.username,
                     onboarded: existingUser.onboarded,
+                    isOnline: true,
+                    profileId: existingUser.profileId,
                 }
             }
         })
@@ -68,7 +90,9 @@ export const authOptions: NextAuthOptions = {
                     username: u.username,
                     id: u.id,
                     onboarded: u.onboarded,
-                    imageUrl: p.imageUrl
+                    imageUrl: p.imageUrl,
+                    isOnline: u.isOnline,
+                    profileId: u.profileId,
                 }
             }
             return token
@@ -81,6 +105,9 @@ export const authOptions: NextAuthOptions = {
                     ...session.user,
                     username: token.username,
                     id: token.id,
+                    onboarded: token.onboarded,
+                    isOnline: token.isOnline,
+                    profileId: token.profileId,
                 }
             }
         },

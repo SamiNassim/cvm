@@ -12,7 +12,7 @@ const GoogleLoginButton: FC<GoogleLoginButtonProps> = ({ children }) => {
 
         // Change URL for production
         signIn("google", {
-            callbackUrl: "http://localhost:3000/admin"
+            callbackUrl: "http://localhost:3000/home"
         })
     }
 

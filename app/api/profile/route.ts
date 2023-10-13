@@ -1,6 +1,5 @@
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { hash } from "bcrypt";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import * as z from "zod";
@@ -33,35 +32,47 @@ export async function PUT(req: Request) {
 
         /* const hashedPassword = await hash(password, 12); */
 
-        const existingProfile = await db.profile.findFirst({
-            where: {
-                userId: session?.user.id
-            }
-        })
+        /*         const existingProfile = await db.profile.findFirst({
+                    where: {
+                        userId: session?.user.id
+                    }
+                }) */
 
-        if (!existingProfile) {
-            const createProfile = await db.profile.create({
-                data: {
-                    userId: session?.user.id!,
-                    name: session?.user.username,
-                    gender,
-                    country,
-                    region,
-                    dob,
-                    relation,
-                    bio,
-                    imageUrl
-                }
-
-            })
-            return NextResponse.json({ createProfile, message: "Profile créé !" }, { status: 201 })
-        }
+        /*        if (!existingProfile) {
+                   const createProfile = await db.profile.create({
+                       data: {
+                           userId: session?.user.id!,
+                           name: session?.user.username,
+                           gender,
+                           country,
+                           region,
+                           dob,
+                           relation,
+                           bio,
+                           imageUrl
+                       }
+                   });
+       
+                   if (createProfile) {
+                       const userOnboarded = await db.user.update({
+                           where: {
+                               id: session?.user.id,
+                           },
+                           data: {
+                               onboarded: true,
+                           }
+                       });
+       
+                       return NextResponse.json({ user: userOnboarded, profile: createProfile, message: "Profile créé !" }, { status: 201 })
+                   }
+               } */
 
         const upsertUser = await db.profile.update({
             where: {
-                userId: session?.user.id
+                id: session?.user.profileId,
             },
             data: {
+                userId: session?.user.id,
                 name: session?.user.username,
                 gender,
                 country,
@@ -71,9 +82,20 @@ export async function PUT(req: Request) {
                 bio,
                 imageUrl
             },
-        })
+        });
 
-        return NextResponse.json({ upsertUser, message: "Profile modifié !" }, { status: 201 });
+        const userOnboarded = await db.user.update({
+            where: {
+                id: session?.user.id,
+            },
+            data: {
+                onboarded: true,
+            }
+        });
+
+
+
+        return NextResponse.json({ upsertUser, userOnboarded, message: "Profile modifié !" }, { status: 201 });
 
     } catch (error) {
         console.log("[ROUTE_PUT]", error);

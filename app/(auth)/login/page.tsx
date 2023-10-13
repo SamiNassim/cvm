@@ -8,7 +8,7 @@ const LoginPage = async () => {
     const session = await getServerSession(authOptions);
 
     if (session?.user) {
-        return redirect("/");
+        return redirect("/home");
     }
 
     return (

@@ -11,7 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { Mail } from "lucide-react";
+import { Mail, Pencil } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 
@@ -51,7 +51,7 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
                             <AvatarFallback>{userInfo?.username}</AvatarFallback>
                         </Avatar>
                         <h1 className="text-2xl">{userInfo?.username}</h1>
-                        {session?.user.id !== params.id && (<Link href={`/messages/${userInfo?.id}`}><Mail /></Link>)}
+                        {session?.user.id === params.id ? <Link href="edit"><Pencil /></Link> : <Link href={`/messages/${userInfo?.id}`}><Mail /></Link>}
                     </div>
                     <div>
                         <h2 className="text-sm">{userInfo?.profile.gender}</h2>

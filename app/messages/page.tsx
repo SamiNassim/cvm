@@ -1,3 +1,4 @@
+import ConversationsList from "@/components/ConversationsList";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
@@ -11,21 +12,29 @@ const Messages = async () => {
             OR: [{
 
                 userOneId: session?.user.id,
+
             },
             {
                 userTwoId: session?.user.id,
             }]
+
+        },
+        include: {
+            userOne: {
+                include: {
+                    profile: true,
+                }
+            },
+            userTwo: {
+                include: {
+                    profile: true,
+                }
+            }
         }
     })
 
-    console.log("sessionlog", session)
-
-    console.log("convlist", conversationsList)
-
     return (
-        <div>
-            Messages list
-        </div>
+        <ConversationsList convData={conversationsList} session={session} />
     )
 }
 
