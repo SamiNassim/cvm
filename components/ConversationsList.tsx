@@ -8,6 +8,10 @@ const ConversationsList = ({ convData, session }: { convData: any, session: any 
 
     const router = useRouter();
 
+
+    // Specify a max length for the message to be truncated if it's too long
+    const maxLength = 20;
+
     return (
         <Table>
             <TableCaption>Liste de vos conversations récentes.</TableCaption>
@@ -20,8 +24,8 @@ const ConversationsList = ({ convData, session }: { convData: any, session: any 
                 </TableRow>
             </TableHeader> */}
             <TableBody>
-                {convData.map((conv: any) => (
-                    <TableRow onClick={() => {
+                {convData.map((conv: any, index: any) => (
+                    <TableRow key={index} onClick={() => {
                         router.push(`/messages/${session?.user.id === conv.userOneId ? conv.userTwo.id : conv.userOne.id}`)
                     }}>
                         <TableCell className="font-medium flex flex-row items-center gap-2">
@@ -31,7 +35,9 @@ const ConversationsList = ({ convData, session }: { convData: any, session: any 
                             </Avatar>{session?.user.id === conv.userOneId ? conv.userTwo.username : conv.userOne.username}
                         </TableCell>
                         <TableCell>
-                            {session?.user.id === conv.userOneId ? conv.userTwo.username : conv.userOne.username}
+                            {conv.messages.map((lastmessage: any) => {
+                                return lastmessage.content.length > maxLength ? lastmessage.content.substring(0, maxLength) + "..." : lastmessage.content
+                            })}
                         </TableCell>
                     </TableRow>
                 ))}

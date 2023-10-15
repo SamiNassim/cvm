@@ -1,7 +1,7 @@
 "use client"
 
 import { redirect, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -46,8 +46,9 @@ function ProfileEditForm({ session, currentProfile }: any) {
         redirect("/login");
     }
 
-    const [country, setCountry] = useState(/* currentProfile && currentProfile.profile.country ? currentProfile.profile.country :  */"");
-    const [region, setRegion] = useState("")
+    const [country, setCountry] = useState(currentProfile && currentProfile.profile.country ? currentProfile.profile.country : "");
+    const [didMount, setDidMount] = useState(false)
+
     const router = useRouter();
 
 
@@ -60,12 +61,13 @@ function ProfileEditForm({ session, currentProfile }: any) {
         defaultValues: {
             gender: currentProfile.profile.gender ? currentProfile.profile.gender : "",
             country: currentProfile.profile.country ? currentProfile.profile.country : "",
-            region: currentProfile.profile.country === country ? currentProfile.profile.region : "",
+            region: currentProfile.profile.region ? currentProfile.profile.region : "",
             dob: currentProfile.profile.dob ? parseISO(currentProfile.profile.dob) : new Date,
             relation: currentProfile.profile.relation ? currentProfile.profile.relation : "",
             bio: currentProfile.profile.bio ? currentProfile.profile.bio : "",
             imageUrl: currentProfile.profile.imageUrl ? currentProfile.profile.imageUrl : "",
         },
+
     })
 
     // 2. Define a submit handler.
@@ -103,7 +105,22 @@ function ProfileEditForm({ session, currentProfile }: any) {
         }
     }
 
-    // States to manage the choice of country and region.
+    // This is a check for the first render
+    useEffect(() => {
+        setDidMount(true)
+    }, []);
+
+    // We only trigger this effect afther the first render
+    useEffect(() => {
+        if (didMount) {
+            setTimeout(() => {
+                form.reset({
+                    country: country,
+                    region: ""
+                })
+            }, 1000)
+        }
+    }, [country])
 
     console.log(form.formState.errors)
 
@@ -220,7 +237,6 @@ function ProfileEditForm({ session, currentProfile }: any) {
                                         value={field.value}
                                         onChange={(val) => {
                                             field.onChange(val)
-                                            setRegion(val)
                                         }} />
                                 </FormControl>
                             </FormItem>
