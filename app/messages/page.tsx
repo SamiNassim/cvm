@@ -34,12 +34,10 @@ const Messages = async () => {
                 take: 1,
                 orderBy: {
                     createdAt: 'desc'
-                }
+                },
             }
         }
     })
-
-    console.log("CONVLIST", conversationsList[0].messages[0])
 
     return (
         <ConversationsList convData={conversationsList} session={session} />

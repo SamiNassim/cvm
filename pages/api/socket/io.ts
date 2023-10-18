@@ -3,6 +3,9 @@ import { NextApiRequest } from "next";
 import { Server as ServerIO } from "socket.io";
 
 import { NextApiResponseServerIo } from "@/types/socketio";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { db } from "@/lib/db";
 
 export const config = {
     api: {

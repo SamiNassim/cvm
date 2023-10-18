@@ -4,8 +4,11 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { Profile } from "@prisma/client";
 import UserCard from "@/components/UserCard";
+import { Server as NetServer } from "http";
+import { Server as ServerIO } from "socket.io";
+import { NextApiResponseServerIo } from "@/types/socketio";
 
-const Home = async () => {
+const Home = async (res: NextApiResponseServerIo) => {
 
     const session = await getServerSession(authOptions);
 
@@ -44,6 +47,34 @@ const Home = async () => {
     }
 
     const users = await getUsers();
+
+    // const httpServer: NetServer = res.socket.server as any;
+    const io = new ServerIO()
+
+    io.on("connection", async (socket) => {
+
+        console.log("LOGCONNEX")
+        const session = await getServerSession(authOptions);
+        const setOnline = await db.user.update({
+            where: {
+                id: session?.user.id,
+            },
+            data: {
+                isOnline: true,
+            },
+        })
+
+        socket.on("disconnect", async () => {
+            const setOffline = await db.user.update({
+                where: {
+                    id: session?.user.id,
+                },
+                data: {
+                    isOnline: false,
+                }
+            })
+        })
+    })
 
     return (
         <div className='flex flex-col pt-[70px] h-1/2 items-center'>

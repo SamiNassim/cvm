@@ -3,9 +3,10 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Toaster } from '@/components/ui/toaster'
-import { Provider } from '@/components/providers/session-provider'
+import { ProviderSession } from '@/components/providers/session-provider'
 import { SocketProvider } from '@/components/providers/socket-provider'
 import { QueryProvider } from '@/components/providers/query-provider'
+import { ThemeProvider } from '@/components/providers/theme-provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,17 +23,23 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className={inter.className}>
-        <Provider>
-          <SocketProvider>
-            <QueryProvider>
-              <main className='h-screen flex flex-col justify-center items-center'>
-                <Navbar />
-                {children}
-              </main>
-              <Toaster />
-            </QueryProvider>
-          </SocketProvider>
-        </Provider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange>
+          <ProviderSession>
+            <SocketProvider>
+              <QueryProvider>
+                <main className='h-screen flex flex-col justify-center items-center'>
+                  <Navbar />
+                  {children}
+                </main>
+                <Toaster />
+              </QueryProvider>
+            </SocketProvider>
+          </ProviderSession>
+        </ThemeProvider>
       </body>
     </html>
   )

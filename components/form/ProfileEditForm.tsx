@@ -42,7 +42,7 @@ const formSchema = z.object({
 
 function ProfileEditForm({ session, currentProfile }: any) {
 
-    if (!session) {
+    if (!session || !currentProfile) {
         redirect("/login");
     }
 
