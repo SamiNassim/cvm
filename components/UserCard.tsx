@@ -36,7 +36,7 @@ const UserCard = ({
 
     return (
         <Link href={`/profile/${userId}`}>
-            <Card>
+            <Card className="dark:bg-[#18191b]">
                 <CardHeader className="flex flex-row items-center gap-4">
                     <Avatar className="w-20 h-20">
                         <AvatarImage src={imageUrl} />

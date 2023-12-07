@@ -38,6 +38,7 @@ export const SocketProvider = ({
 
         socketInstance.on("connect", () => {
             setIsConnected(true);
+            console.log(socketInstance)
         });
 
         socketInstance.on("disconnect", () => {

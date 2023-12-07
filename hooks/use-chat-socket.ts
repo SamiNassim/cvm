@@ -29,6 +29,7 @@ export const useChatSocket = ({
             return;
         }
 
+        
         socket.on(updateKey, (message: MessageWithMemberWithProfile) => {
             queryClient.setQueryData([queryKey], (oldData: any) => {
                 if (!oldData || !oldData.pages || oldData.pages.length === 0) {

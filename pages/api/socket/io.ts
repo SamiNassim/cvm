@@ -23,6 +23,7 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
             addTrailingSlash: false,
         });
         res.socket.server.io = io;
+        console.log(io)
     }
 
     res.end();
