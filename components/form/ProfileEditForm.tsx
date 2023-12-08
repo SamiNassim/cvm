@@ -26,7 +26,13 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import { Textarea } from "../ui/textarea";
 import { toast } from "../ui/use-toast";
+import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import fr from 'date-fns/locale/fr';
+registerLocale('fr', fr)
+setDefaultLocale('fr');
 
+const dateFormatArray = ["dd/MM/yyyy", "dd/MM/yy"];
 
 const formSchema = z.object({
     gender: z.string().min(1, "Veuillez choisir votre genre"),
@@ -48,6 +54,8 @@ function ProfileEditForm({ session, currentProfile }: any) {
 
     const [country, setCountry] = useState(currentProfile && currentProfile.profile.country ? currentProfile.profile.country : "");
     const [didMount, setDidMount] = useState(false)
+
+    const [startDate, setStartDate] = useState(new Date());
 
     const router = useRouter();
 
@@ -169,40 +177,20 @@ function ProfileEditForm({ session, currentProfile }: any) {
                         render={({ field }) => (
                             <FormItem className="flex flex-col">
                                 <FormLabel>Date de naissance</FormLabel>
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <FormControl>
-                                            <Button
-                                                variant={"outline"}
-                                                className={cn(
-                                                    "w-[240px] pl-3 text-left font-normal",
-                                                    !field.value && "text-muted-foreground"
-                                                )}
-                                            >
-                                                {field.value ? (
-                                                    format(field.value, "PPP")
-                                                ) : (
-                                                    <span>Pick a date</span>
-                                                )}
-                                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                            </Button>
-                                        </FormControl>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto p-0" align="start">
-                                        <Calendar
-                                            mode="single"
-                                            defaultMonth={new Date(2005, 8)}
-                                            /* captionLayout="dropdown"
-                                            fromYear={1925} toYear={2025} */
-                                            selected={field.value}
-                                            onSelect={field.onChange}
-                                            disabled={(date) =>
-                                                date > new Date() || date < new Date("1900-01-01")
-                                            }
-                                            initialFocus
-                                        />
-                                    </PopoverContent>
-                                </Popover>
+                                <FormControl>
+                                    <DatePicker
+                                        locale="fr"
+                                        dateFormat={dateFormatArray}
+                                        selected={field.value}
+                                        onChange={(val) => {
+                                            field.onChange(val)
+                                        }}
+                                        peekNextMonth
+                                        showMonthDropdown
+                                        showYearDropdown
+                                        dropdownMode="select"
+                                    />
+                                </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}

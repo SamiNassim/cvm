@@ -130,7 +130,8 @@ model Conversation {
   userTwoId String
   userTwo   User   @relation("UserTwo", fields: [userTwoId], references: [id], onDelete: Cascade)
 
-  messages Message[]
+  messages     Message[]
+  messagesRead Int       @default(0)
 
   @@unique([userOneId, userTwoId])
   @@index([userTwoId])
