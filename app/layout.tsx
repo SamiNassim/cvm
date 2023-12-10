@@ -16,11 +16,12 @@ export const metadata: Metadata = {
   description: 'Site de rencontre',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+
   return (
     <html lang="fr" suppressHydrationWarning>
       <body className={inter.className}>

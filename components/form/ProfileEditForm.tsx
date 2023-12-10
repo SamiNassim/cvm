@@ -113,14 +113,14 @@ function ProfileEditForm({ session, currentProfile }: any) {
         setDidMount(true)
     }, []);
 
-    // We only trigger this effect afther the first render
+    // We only trigger this effect after the first render
     useEffect(() => {
         if (didMount) {
             setTimeout(() => {
                 form.reset({
                     country: country,
                     region: ""
-                })
+                }, { keepValues: true })
             }, 1000)
         }
     }, [country])
