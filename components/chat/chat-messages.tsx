@@ -12,7 +12,6 @@ import { useChatScroll } from "@/hooks/use-chat-scroll";
 import { ChatItem } from "./chat-item";
 import { ChatWelcome } from "./chat-welcome";
 
-
 const DATE_FORMAT = "d MMM yyyy, HH:mm";
 
 type MessageWithMemberWithProfile = Message & {
@@ -44,6 +43,7 @@ export const ChatMessages = ({
     paramValue,
     type,
 }: ChatMessagesProps) => {
+
     const queryKey = `chat:${chatId}`;
     const addKey = `chat:${chatId}:messages`;
     const updateKey = `chat:${chatId}:messages:update`

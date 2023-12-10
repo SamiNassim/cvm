@@ -89,9 +89,21 @@ export default async function handler(
             }
         });
 
+        const updateUnreadMessages = await db.conversation.update({
+            where: {
+                id: conversation.id,
+            },
+            data: {
+                ...(user === conversation.userOne ? { userTwoUnread: { increment: 1 } } : { userOneUnread: { increment: 1 } }),
+            },
+        });
+
         const channelKey = `chat:${conversationId}:messages`;
 
-        res?.socket?.server?.io?.emit(channelKey, message);
+        res?.socket?.server?.io?.emit(channelKey, message, updateUnreadMessages);
+
+        // TESTING SOMETHING HERE
+        /* res?.socket?.server?.io?.emit(channelKey, ); */
 
         return res.status(200).json(message);
 

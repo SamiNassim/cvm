@@ -7,11 +7,6 @@ import { useSession } from "next-auth/react"
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarShortcut, MenubarTrigger } from "./ui/menubar"
 import { LogOut, Menu, Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
-/* import { Switch } from "@nextui-org/react"; */
-/* import { Switch } from "./ui/switch" */
-import { MoonIcon } from "@/components/ui/MoonIcon";
-import { SunIcon } from "@/components/ui/SunIcon";
-import { motion, AnimatePresence } from "framer-motion"
 
 const UserAccountNav = () => {
 

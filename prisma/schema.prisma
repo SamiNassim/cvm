@@ -124,14 +124,15 @@ model Message {
 model Conversation {
   id String @id @default(uuid())
 
-  userOneId String
-  userOne   User   @relation("UserOne", fields: [userOneId], references: [id], onDelete: Cascade)
+  userOneId     String
+  userOne       User   @relation("UserOne", fields: [userOneId], references: [id], onDelete: Cascade)
+  userOneUnread Int    @default(0)
 
-  userTwoId String
-  userTwo   User   @relation("UserTwo", fields: [userTwoId], references: [id], onDelete: Cascade)
+  userTwoId     String
+  userTwo       User   @relation("UserTwo", fields: [userTwoId], references: [id], onDelete: Cascade)
+  userTwoUnread Int    @default(0)
 
-  messages     Message[]
-  messagesRead Int       @default(0)
+  messages Message[]
 
   @@unique([userOneId, userTwoId])
   @@index([userTwoId])

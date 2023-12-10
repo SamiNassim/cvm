@@ -10,7 +10,7 @@ export const getOrCreateConversation = async (userOneId: string, userTwoId: stri
     return conversation;
 }
 
-const findConversation = async (userOneId: string, userTwoId: string) => {
+export const findConversation = async (userOneId: string, userTwoId: string) => {
     try {
         return await db.conversation.findFirst({
             where: {

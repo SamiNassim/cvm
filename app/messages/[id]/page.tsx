@@ -44,9 +44,6 @@ const MessagesFromId = async ({
 
     const { userOne, userTwo } = conversation;
 
-    console.log("USERONE", userOne.profile);
-    console.log("USERTWO", userTwo);
-
     const otherUser = userOne.id === session?.user.id ? userTwo : userOne;
 
 

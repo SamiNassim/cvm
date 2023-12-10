@@ -3,6 +3,7 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useRouter } from "next/navigation";
+import { Badge } from "./ui/badge";
 
 const ConversationsList = ({ convData, session }: { convData: any, session: any }) => {
 
@@ -38,6 +39,9 @@ const ConversationsList = ({ convData, session }: { convData: any, session: any 
                             {conv.messages.map((lastmessage: any) => {
                                 return lastmessage.content.length > maxLength ? lastmessage.content.substring(0, maxLength) + "..." : lastmessage.content
                             })}
+                        </TableCell>
+                        <TableCell>
+                            {session?.user.id === conv.userOneId ? <Badge className={conv.userOneUnread === 0 ? "hidden" : ""} variant="destructive">{conv.userOneUnread}</Badge> : <Badge className={conv.userTwoUnread === 0 ? "hidden" : ""} variant="destructive">{conv.userTwoUnread}</Badge>}
                         </TableCell>
                     </TableRow>
                 ))}

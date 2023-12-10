@@ -75,6 +75,15 @@ export const ChatItem = ({
     }
 
     useEffect(() => {
+        fetch("/api/messages/read", { method: "PUT", body: JSON.stringify(params) })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.log("[USEEFFECT PUT ERROR]", error))
+    }, [content])
+
+    console.log("STAMP", timestamp);
+
+    useEffect(() => {
         const handleKeyDown = (event: any) => {
             if (event.key === "Escape" || event.keyCode === 27) {
                 setIsEditing(false);
