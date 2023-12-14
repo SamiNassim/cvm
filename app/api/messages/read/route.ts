@@ -6,7 +6,6 @@ import { NextRequest, NextResponse } from "next/server";
 export async function PUT(req: NextRequest) {
 
     const body = await req.json();
-    console.log("BODYLOG", body.id);
 
     try {
 
@@ -64,35 +63,3 @@ export async function PUT(req: NextRequest) {
     }
 
 }
-
-/* export async function GET() {
-
-    try {
-
-        const session = await getServerSession(authOptions);
-        if (!session) {
-            return new NextResponse("Unauthorized", { status: 401 });
-        }
-
-        const userMessages = await db.message.findMany({
-            where: {
-                userId: session.user.id
-            }
-        })
-
-        const currentUser = await db.user.findFirst({
-            where: {
-                id: session.user.id,
-            }
-        })
-
-        const unreadMessages = userMessages.length - currentUser?.messagesRead!;
-
-        return NextResponse.json({ unreadMessages });
-
-    }
-    catch (error) {
-
-    }
-
-} */

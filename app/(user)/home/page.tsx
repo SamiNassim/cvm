@@ -67,7 +67,7 @@ const Home = async (res: NextApiResponseServerIo) => {
         <div className='flex flex-col pt-[70px] h-1/2 items-center'>
             <h1 className="mb-4">Derniers membres inscrits</h1>
             <div className="flex flex-row flex-wrap gap-4 justify-center items-center">
-                {users.getProfileById.map((userInfo: Profile) => {
+                {users.getProfileById.map((userInfo: any) => {
                     return (
                         <UserCard
                             key={userInfo.id}
@@ -78,6 +78,7 @@ const Home = async (res: NextApiResponseServerIo) => {
                             country={userInfo.country}
                             region={userInfo.region}
                             dob={userInfo.dob}
+                            isOnline={userInfo.users[0].isOnline}
                         />
                     )
                 })}

@@ -114,6 +114,9 @@ export async function GET(req: Request) {
                 createdAt: 'desc',
             },
             take: 10,
+            include: {
+                users: true,
+            }
         })
 
         return NextResponse.json({ getProfileById }, { status: 200 })

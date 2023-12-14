@@ -11,6 +11,17 @@ const Navbar = async () => {
 
     const session = await getServerSession(authOptions);
 
+    if (session) {
+        const goOnline = await db.user.update({
+            where: {
+                id: session?.user.id,
+            },
+            data: {
+                isOnline: true,
+            }
+        })
+    }
+
     const userOneConversations = await db.conversation.findMany({
         where: {
             userOne: {

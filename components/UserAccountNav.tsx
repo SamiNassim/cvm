@@ -7,21 +7,24 @@ import { useSession } from "next-auth/react"
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarShortcut, MenubarTrigger } from "./ui/menubar"
 import { LogOut, Menu, Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
+import dynamic from "next/dynamic"
 
 const UserAccountNav = () => {
 
+    const DisconnectUser = dynamic(() => import('@/components/DisconnectUser'), {
+        ssr: false,
+    })
+
     const { data: session } = useSession();
     const { theme, systemTheme, setTheme } = useTheme();
-
     const currentTheme = theme === 'system' ? systemTheme : theme;
 
     const handleThemeSwitch = () => { currentTheme === "dark" ? setTheme("light") : setTheme("dark") }
 
-    const iconStyle = "";
-
     return (
         <div className="flex justify-center item-center">
             <div className="flex items-center md:hidden">
+                <DisconnectUser />
                 <Menubar>
                     <MenubarMenu>
                         <MenubarTrigger><Menu size={18} /></MenubarTrigger>
@@ -33,7 +36,7 @@ const UserAccountNav = () => {
                             <MenubarSeparator />
                             <MenubarItem className="flex justify-between" onSelect={(e) => e.preventDefault()}>
                                 Dark mode
-                                {currentTheme === "dark" ? <Sun className={iconStyle} onClick={handleThemeSwitch} /> : <Moon className={iconStyle} onClick={handleThemeSwitch} />}
+                                {currentTheme === "dark" ? <Sun onClick={handleThemeSwitch} /> : <Moon onClick={handleThemeSwitch} />}
                             </MenubarItem>
                             <MenubarSeparator />
                             <MenubarItem onClick={() => signOut({
