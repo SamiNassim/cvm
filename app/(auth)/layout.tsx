@@ -16,7 +16,7 @@ const AuthLayout: FC<AuthLayoutProps> = async ({ children }) => {
     }
 
     return (
-        <div className="bg-slate-200 p-10 rounded-md">{children}</div>
+        <div className="flex flex-col min-h-screen justify-center items-center rounded-md">{children}</div>
     )
 }
 

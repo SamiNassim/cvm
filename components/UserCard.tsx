@@ -39,7 +39,7 @@ const UserCard = ({
 
     return (
         <Link href={`/profile/${userId}`}>
-            <Card className="dark:bg-[#18191b]">
+            <Card>
                 <CardHeader className="flex flex-row items-center gap-4 p-[8px]">
                     <BadgeUI content="" color={isOnline ? "success" : "default"} shape="circle" placement="bottom-right">
                         <Avatar className="w-20 h-20">

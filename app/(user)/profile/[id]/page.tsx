@@ -37,13 +37,12 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
         return age;
     }
 
-    console.log(userInfo?.profile);
     const session = await getServerSession(authOptions);
     const userAge = getAge(userInfo?.profile.dob!);
 
     return (
         <>
-            <div className="w-full h-full mt-10 p-10">
+            <div className="w-full h-full p-10">
                 <div className="flex flex-row items-center justify-between">
                     <div className="flex items-center gap-6">
                         <Avatar className="w-20 h-20">

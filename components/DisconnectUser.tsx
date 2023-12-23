@@ -7,7 +7,10 @@ const DisconnectUser = () => {
 
         const goOffline = () => {
 
-            fetch("/api/user/offline", { method: "PUT", headers: { "Content-Type": "application/json" } })
+            fetch("/api/user/offline", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" }
+            })
                 .then(response => response.json())
                 .then(data => console.log(data))
                 .catch(error => console.log("[OFFLINE PUT ERROR]", error))

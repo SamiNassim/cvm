@@ -3,7 +3,7 @@ import LoginForm from "@/components/form/LoginForm";
 const LoginPage = async () => {
 
     return (
-        <div className="w-full">
+        <div className="min-h-screen flex justify-center items-center flex-col">
             <LoginForm />
         </div>
     )

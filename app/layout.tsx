@@ -8,6 +8,8 @@ import { SocketProvider } from '@/components/providers/socket-provider'
 import { QueryProvider } from '@/components/providers/query-provider'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { NextUIProviders } from '@/components/providers/nextui-provider'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,6 +24,8 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
 
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="fr" suppressHydrationWarning>
       <body className={inter.className}>
@@ -34,7 +38,7 @@ export default async function RootLayout({
             <SocketProvider>
               <QueryProvider>
                 <NextUIProviders>
-                  <main className='h-screen flex flex-col justify-center items-center'>
+                  <main className='flex flex-col justify-center items-center'>
                     <Navbar />
                     {children}
                   </main>

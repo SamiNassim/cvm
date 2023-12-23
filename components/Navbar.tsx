@@ -53,14 +53,20 @@ const Navbar = async () => {
     let unreadMessages = convOneSum + convTwoSum;
 
     return (
-        <div className="bg-zinc-100 py-2 border-b border-s-zinc-200 fixed w-full z-10 top-0 dark:bg-[#25232a]">
-            <div className="container flex items-center justify-between">
+        <header className="bg-zinc-100 sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <div className="h-14 container flex items-center justify-between">
                 <Link href={session?.user ? ("/home") : ("/")}>
                     <Heart strokeWidth={1.5} />
                 </Link>
                 {session?.user ? (
                     <>
-                        <div><Link className="flex" href={"/messages"}><Badge className={unreadMessages === 0 ? "hidden" : ""} placement="top-right" content={unreadMessages} color="danger" shape="circle" size="md" showOutline={false}><Mail strokeWidth={1.5} /></Badge></Link></div>
+                        <div className="absolute inset-x-2/4">
+                            <Link className="flex" href={"/messages"}>
+                                <Badge className={unreadMessages === 0 ? "hidden" : ""} placement="top-right" content={unreadMessages} color="danger" shape="circle" size="md" showOutline={false}>
+                                    <Mail strokeWidth={1.5} />
+                                </Badge>
+                            </Link>
+                        </div>
                         <UserAccountNav />
                     </>
                 ) : (
@@ -70,7 +76,7 @@ const Navbar = async () => {
                 )}
 
             </div>
-        </div>
+        </header>
     )
 }
 
