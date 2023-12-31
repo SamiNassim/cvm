@@ -11,6 +11,8 @@ import GoogleLoginButton from "../GoogleLoginButton";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast"
+import { useState } from "react";
+import { Spinner } from "@nextui-org/spinner";
 
 
 const FormSchema = z.object({
@@ -22,6 +24,8 @@ const FormSchema = z.object({
 });
 
 const LoginForm = () => {
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const router = useRouter();
     const { toast } = useToast()
@@ -35,6 +39,7 @@ const LoginForm = () => {
     })
 
     const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+        setIsLoading(true);
         const signInData = await signIn('credentials', {
             email: values.email,
             password: values.password,
@@ -45,6 +50,7 @@ const LoginForm = () => {
             router.refresh();
             router.push("/home");
         } else {
+            setIsLoading(false);
             toast({
                 title: "Erreur",
                 description: "Une erreur s'est produite !",
@@ -87,7 +93,7 @@ const LoginForm = () => {
                     />
                 </div>
 
-                <Button className="w-full mt-6" type="submit">Login</Button>
+                <Button className="w-full mt-6" type="submit" disabled={isLoading}>{isLoading ? <Spinner color="default" /> : "Login"}</Button>
             </form>
             <div className="mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
                 ou

@@ -10,6 +10,9 @@ import Link from "next/link";
 import GoogleLoginButton from "../GoogleLoginButton";
 import { useRouter } from "next/navigation";
 import { toast } from "../ui/use-toast";
+import { useState } from "react";
+import { Spinner } from "@nextui-org/spinner";
+
 
 const FormSchema = z.object({
     username: z.string().min(2, "Nom d'utilisateur requis").max(30),
@@ -28,6 +31,8 @@ const FormSchema = z.object({
 
 const RegisterForm = () => {
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const router = useRouter();
 
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -41,6 +46,7 @@ const RegisterForm = () => {
     })
 
     const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+        setIsLoading(true);
         const response = await fetch("/api/user", {
             method: "POST",
             headers: {
@@ -61,6 +67,7 @@ const RegisterForm = () => {
 
             })
         } else {
+            setIsLoading(false);
             toast({
                 title: "Erreur",
                 description: "Une erreur s'est produite !",
@@ -131,7 +138,7 @@ const RegisterForm = () => {
                     />
                 </div>
 
-                <Button className="w-full mt-6" type="submit">Créer un compte</Button>
+                <Button className="w-full mt-6" type="submit" disabled={isLoading}>{isLoading ? <Spinner color="default" /> : "Créer un compte"}</Button>
             </form>
             <div className="mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
                 ou

@@ -109,6 +109,13 @@ export async function GET(req: Request) {
     try {
 
         const getProfileById = await db.profile.findMany({
+            where: {
+                users: {
+                    every: {
+                        onboarded: true,
+                    }
+                }
+            },
             orderBy:
             {
                 createdAt: 'desc',
