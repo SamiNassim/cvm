@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { buttonVariants } from "./ui/button";
 import { Heart, Mail } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import UserAccountNav from "./UserAccountNav";
 import { db } from "@/lib/db";
 import { Badge } from "@nextui-org/badge";
+import { Button } from "@nextui-org/button";
 
 const Navbar = async () => {
 
@@ -70,8 +70,8 @@ const Navbar = async () => {
                         <UserAccountNav />
                     </>
                 ) : (
-                    <Link className={buttonVariants()} href="/login">
-                        Login
+                    <Link href="/login">
+                        <Button color="primary" radius="sm">Login</Button>
                     </Link>
                 )}
 

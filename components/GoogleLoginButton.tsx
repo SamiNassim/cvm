@@ -1,6 +1,7 @@
 import { FC, ReactNode } from "react";
-import { Button } from "./ui/button";
+import { Button } from "@nextui-org/button";
 import { signIn } from "next-auth/react";
+import GoogleIcon from "./GoogleIcon";
 
 interface GoogleLoginButtonProps {
     children: ReactNode;
@@ -17,7 +18,7 @@ const GoogleLoginButton: FC<GoogleLoginButtonProps> = ({ children }) => {
     }
 
     return (
-        <Button onClick={loginWithGoogle} className="w-full">{children}</Button>
+        <Button onClick={loginWithGoogle} color="primary" radius="sm" className="w-full" startContent={<GoogleIcon />}>{children}</Button>
     )
 }
 

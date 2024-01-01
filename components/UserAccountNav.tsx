@@ -1,7 +1,7 @@
 "use client"
 
 import { signOut } from "next-auth/react"
-import { Button } from "./ui/button"
+import { Button } from "@nextui-org/button";
 import Link from "next/link"
 import { useSession } from "next-auth/react"
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarShortcut, MenubarTrigger } from "./ui/menubar"
@@ -48,11 +48,11 @@ const UserAccountNav = () => {
                 </Menubar>
             </div>
             <div className="md:flex gap-8 hidden">
-                <Link href={`/profile/${session?.user.id}`}><Button>Profil</Button></Link>
+                <Link href={`/profile/${session?.user.id}`}><Button color="primary" radius="sm">Profil</Button></Link>
                 <Button onClick={() => signOut({
                     redirect: true,
                     callbackUrl: `${window.location.origin}/login`
-                })} variant="destructive">Deconnexion</Button>
+                })} color="danger" radius="sm">Deconnexion</Button>
             </div>
         </div>
     )

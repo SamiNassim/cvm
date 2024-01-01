@@ -5,7 +5,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
 import Link from "next/link";
 import GoogleLoginButton from "../GoogleLoginButton";
 import { signIn } from "next-auth/react";
@@ -13,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast"
 import { useState } from "react";
 import { Spinner } from "@nextui-org/spinner";
+import { Button } from "@nextui-org/button";
 
 
 const FormSchema = z.object({
@@ -93,7 +93,7 @@ const LoginForm = () => {
                     />
                 </div>
 
-                <Button className="w-full mt-6" type="submit" disabled={isLoading}>{isLoading ? <Spinner color="default" /> : "Login"}</Button>
+                <Button className="w-full mt-6" color="primary" radius="sm" type="submit" isDisabled={isLoading}>{isLoading ? <Spinner color="default" /> : "Login"}</Button>
             </form>
             <div className="mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
                 ou
