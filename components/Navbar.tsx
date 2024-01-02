@@ -13,7 +13,7 @@ const Navbar = async () => {
     const session = await getServerSession(authOptions);
 
     return (
-        <header>
+        <header className="w-full">
             <NavbarNew session={session} />
         </header>
     )
