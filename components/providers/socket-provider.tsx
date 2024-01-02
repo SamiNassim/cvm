@@ -38,9 +38,32 @@ export const SocketProvider = ({
 
         socketInstance.on("connect", () => {
             setIsConnected(true);
+            console.log("Connectsocket")
+            fetch("/api/user/online", {
+                method: "PATCH",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.log("[ONLINE PATCH ERROR]", error))
+
         });
 
         socketInstance.on("disconnect", () => {
+            fetch("/api/user/offline", {
+                method: "PATCH",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.log("[OFFLINE PATCH ERROR]", error))
+            console.log("DisconnectSocket");
             setIsConnected(false);
         });
 

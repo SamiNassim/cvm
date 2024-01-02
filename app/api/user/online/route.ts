@@ -13,19 +13,19 @@ export async function PATCH(req: Request) {
             return new NextResponse("Unauthorized", { status: 401 });
         }
 
-        const goOffline = await db.user.update({
+        const goOnline = await db.user.update({
             where: {
                 id: session?.user.id,
             },
             data: {
-                isOnline: false,
+                isOnline: true,
             },
         })
 
-        return NextResponse.json({ message: "User disconnected" }, { status: 201 });
+        return NextResponse.json({ message: "User connected" }, { status: 201 });
 
     } catch (error) {
-        console.log("[PATCH_OFFLINE_API]", error);
+        console.log("[PATCH_ONLINE_API]", error);
         return new NextResponse("Internal Error", { status: 500 })
     }
 
