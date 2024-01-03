@@ -8,7 +8,6 @@ import { SocketProvider } from '@/components/providers/socket-provider'
 import { QueryProvider } from '@/components/providers/query-provider'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { NextUIProviders } from '@/components/providers/nextui-provider'
-import NavbarNew from '@/components/NavbarNew'
 
 const inter = Inter({ subsets: ['latin'] })
 

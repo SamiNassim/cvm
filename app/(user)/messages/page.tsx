@@ -1,4 +1,5 @@
 import ConversationsList from "@/components/ConversationsList";
+import ConversationsListNew from "@/components/ConversationsListNew";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
@@ -40,7 +41,7 @@ const Messages = async () => {
     })
 
     return (
-        <ConversationsList convData={conversationsList} session={session} />
+        <ConversationsListNew convData={conversationsList} session={session} />
     )
 }
 

@@ -7,15 +7,19 @@ import {
 import { Link } from "@nextui-org/link";
 import { Button } from "@nextui-org/button";
 import { Badge } from "@nextui-org/badge";
-import { Heart, Mail } from "lucide-react";
+import { Heart, Mail, Moon, Sun } from "lucide-react";
 import { Avatar } from "@nextui-org/avatar";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem } from "@nextui-org/dropdown";
 import { signOut } from "next-auth/react";
+import { useTheme } from "next-themes";
 
 export default function NavbarNew(session: any) {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-    const [unreadMessages, setUnreadMessages] = useState(0)
+    const [unreadMessages, setUnreadMessages] = useState(0);
+    const { theme, systemTheme, setTheme } = useTheme();
 
+    const currentTheme = theme === 'system' ? systemTheme : theme;
+    const handleThemeSwitch = () => { currentTheme === "dark" ? setTheme("light") : setTheme("dark") }
     console.log(session.session)
 
     useEffect(() => {
@@ -71,6 +75,14 @@ export default function NavbarNew(session: any) {
                                     <p className="font-semibold">{session?.session?.user.username}</p>
                                 </DropdownItem>
                                 <DropdownItem key="profile" href={`/profile/${session?.session.user.id}`}>Profil</DropdownItem>
+                                <DropdownItem
+                                    key="darkmode"
+                                    closeOnSelect={false}
+                                    onClick={() => handleThemeSwitch()}
+                                    endContent={currentTheme === "dark" ?
+                                        <Sun fill="grey" strokeWidth={0.5} onClick={() => handleThemeSwitch()} /> :
+                                        <Moon fill="grey" strokeWidth={0.5} color="grey" onClick={() => handleThemeSwitch()} />}>Dark mode
+                                </DropdownItem>
                                 <DropdownItem key="logout" color="danger" onClick={() => signOut({
                                     redirect: true,
                                     callbackUrl: `${window.location.origin}/login`
