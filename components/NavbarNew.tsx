@@ -7,7 +7,7 @@ import {
 import { Link } from "@nextui-org/link";
 import { Button } from "@nextui-org/button";
 import { Badge } from "@nextui-org/badge";
-import { Heart, Mail, Moon, Sun } from "lucide-react";
+import { FileEdit, Heart, LogOut, Mail, Moon, Pencil, Sun, User } from "lucide-react";
 import { Avatar } from "@nextui-org/avatar";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem } from "@nextui-org/dropdown";
 import { signOut } from "next-auth/react";
@@ -71,10 +71,11 @@ export default function NavbarNew(session: any) {
                                     src={session?.session.user.image} />
                             </DropdownTrigger>
                             <DropdownMenu aria-label="Profile Actions" variant="flat">
-                                <DropdownItem key="profile" className="h-12 gap-2">
+                                <DropdownItem href={`/profile/${session?.session.user.id}`} key="name" className="h-12 gap-2">
                                     <p className="font-semibold">{session?.session?.user.username}</p>
                                 </DropdownItem>
-                                <DropdownItem key="profile" href={`/profile/${session?.session.user.id}`}>Profil</DropdownItem>
+                                <DropdownItem endContent={<User color="grey" />} key="profile" href={`/profile/${session?.session.user.id}`}>Profil</DropdownItem>
+                                <DropdownItem endContent={<FileEdit color="grey" />} key="editprofile" href={`/profile/edit/${session?.session.user.id}`}>Modifier profil</DropdownItem>
                                 <DropdownItem
                                     key="darkmode"
                                     closeOnSelect={false}
@@ -83,7 +84,7 @@ export default function NavbarNew(session: any) {
                                         <Sun fill="grey" strokeWidth={0.5} onClick={() => handleThemeSwitch()} /> :
                                         <Moon fill="grey" strokeWidth={0.5} color="grey" onClick={() => handleThemeSwitch()} />}>Dark mode
                                 </DropdownItem>
-                                <DropdownItem key="logout" color="danger" onClick={() => signOut({
+                                <DropdownItem endContent={<LogOut color="grey" />} key="logout" color="danger" onClick={() => signOut({
                                     redirect: true,
                                     callbackUrl: `${window.location.origin}/login`
                                 })}>

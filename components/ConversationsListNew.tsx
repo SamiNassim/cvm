@@ -36,19 +36,20 @@ export default function ConversationsListNew({ convData, session }: { convData: 
     const MAX_LENGTH = 20;
 
     return (
-        <div className="flex items-center justify-center w-full">
+        <div className="flex justify-center items-center w-full">
             <Skeleton isLoaded={!isLoading} className="w-full">
                 <Table hideHeader aria-label="Example static collection table">
                     <TableHeader>
                         <TableColumn>AVATAR</TableColumn>
                         <TableColumn>LASTMESSAGE</TableColumn>
+                        <TableColumn>UNREADMESSAGES</TableColumn>
                     </TableHeader>
                     <TableBody>
                         {convData.map((conv: any, index: any) => (
                             <TableRow data-hover key={index} onClick={() => {
                                 router.push(`/messages/${session?.user.id === conv.userOneId ? conv.userTwo.id : conv.userOne.id}`)
                             }}>
-                                <TableCell>
+                                <TableCell className="flex justify-center">
                                     {session?.user.id === conv.userOneId ?
                                         <User
                                             name={session?.user.id === conv.userOneId ? conv.userTwo.username : conv.userOne.username}
@@ -69,10 +70,12 @@ export default function ConversationsListNew({ convData, session }: { convData: 
                                         />}
                                 </TableCell>
                                 <TableCell>
-                                    {session?.user.id === conv.userOneId ? <Badge className={conv.userOneUnread === 0 ? "hidden" : ""} variant="destructive">{conv.userOneUnread}</Badge> : <Badge className={conv.userTwoUnread === 0 ? "hidden" : ""} variant="destructive">{conv.userTwoUnread}</Badge>}
                                     {conv.messages.map((lastmessage: any) => {
                                         return lastmessage.content.length > MAX_LENGTH ? lastmessage.content.substring(0, MAX_LENGTH) + "..." : lastmessage.content;
                                     })}
+                                </TableCell>
+                                <TableCell>
+                                    {session?.user.id === conv.userOneId ? <Badge className={conv.userOneUnread === 0 ? "hidden" : ""} variant="destructive">{conv.userOneUnread}</Badge> : <Badge className={conv.userTwoUnread === 0 ? "hidden" : ""} variant="destructive">{conv.userTwoUnread}</Badge>}
                                 </TableCell>
                             </TableRow>))}
                     </TableBody>
