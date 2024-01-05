@@ -1,11 +1,11 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { Profile } from "@prisma/client";
-import UserCard from "@/components/UserCard";
 import { Server as ServerIO } from "socket.io";
 import { NextApiResponseServerIo } from "@/types/socketio";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
+import UserCard from "@/components/user-card";
 
 const Home = async (res: NextApiResponseServerIo) => {
 
@@ -35,34 +35,6 @@ const Home = async (res: NextApiResponseServerIo) => {
 
     const users = await getUsers();
 
-    // const httpServer: NetServer = res.socket.server as any;
-    /*     const io = new ServerIO()
-    
-        io.on("connection", async (socket) => {
-    
-            console.log("LOGCONNEX")
-            const session = await getServerSession(authOptions);
-            const setOnline = await db.user.update({
-                where: {
-                    id: session?.user.id,
-                },
-                data: {
-                    isOnline: true,
-                },
-            })
-    
-            socket.on("disconnect", async () => {
-                const setOffline = await db.user.update({
-                    where: {
-                        id: session?.user.id,
-                    },
-                    data: {
-                        isOnline: false,
-                    }
-                })
-            })
-        }) */
-
     return (
         <div className='flex flex-col pt-[70px] h-1/2 items-center'>
             <h1 className="mb-4">Derniers membres inscrits</h1>
@@ -79,6 +51,7 @@ const Home = async (res: NextApiResponseServerIo) => {
                             region={userInfo.region}
                             dob={userInfo.dob}
                             isOnline={userInfo.users[0].isOnline}
+                            bio={userInfo.bio}
                         />
                     )
                 })}

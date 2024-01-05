@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { Badge as BadgeUI } from "@nextui-org/react";
 
-interface UserCardProps {
+interface UserCardOldProps {
     userId: string,
     name: string | null,
     imageUrl: string,
@@ -14,7 +14,7 @@ interface UserCardProps {
     isOnline: boolean,
 }
 
-const UserCard = ({
+const UserCardOld = ({
     userId,
     name,
     imageUrl,
@@ -22,7 +22,7 @@ const UserCard = ({
     region,
     gender,
     dob,
-    isOnline }: UserCardProps) => {
+    isOnline }: UserCardOldProps) => {
 
     function getAge(dateString: string) {
         var today = new Date();
@@ -69,4 +69,4 @@ const UserCard = ({
     )
 }
 
-export default UserCard;
+export default UserCardOld;
