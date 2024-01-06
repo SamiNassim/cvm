@@ -1,4 +1,3 @@
-import ConversationsList from "@/components/ConversationsList";
 import ConversationsListNew from "@/components/ConversationsListNew";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";

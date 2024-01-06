@@ -1,7 +1,5 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { Profile } from "@prisma/client";
-import { Server as ServerIO } from "socket.io";
 import { NextApiResponseServerIo } from "@/types/socketio";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";

@@ -7,9 +7,9 @@ import {
 import { Link } from "@nextui-org/link";
 import { Button } from "@nextui-org/button";
 import { Badge } from "@nextui-org/badge";
-import { FileEdit, Heart, LogOut, Mail, Moon, Pencil, Sun, User } from "lucide-react";
+import { FileEdit, Heart, LogOut, Mail, Moon, Sun, User } from "lucide-react";
 import { Avatar } from "@nextui-org/avatar";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem } from "@nextui-org/dropdown";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/dropdown";
 import { signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
 

@@ -30,43 +30,6 @@ export async function PUT(req: Request) {
             bio,
             imageUrl } = profileSchema.parse(body);
 
-        /* const hashedPassword = await hash(password, 12); */
-
-        /*         const existingProfile = await db.profile.findFirst({
-                    where: {
-                        userId: session?.user.id
-                    }
-                }) */
-
-        /*        if (!existingProfile) {
-                   const createProfile = await db.profile.create({
-                       data: {
-                           userId: session?.user.id!,
-                           name: session?.user.username,
-                           gender,
-                           country,
-                           region,
-                           dob,
-                           relation,
-                           bio,
-                           imageUrl
-                       }
-                   });
-       
-                   if (createProfile) {
-                       const userOnboarded = await db.user.update({
-                           where: {
-                               id: session?.user.id,
-                           },
-                           data: {
-                               onboarded: true,
-                           }
-                       });
-       
-                       return NextResponse.json({ user: userOnboarded, profile: createProfile, message: "Profile créé !" }, { status: 201 })
-                   }
-               } */
-
         const upsertUser = await db.profile.update({
             where: {
                 id: session?.user.profileId,

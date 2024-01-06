@@ -3,18 +3,10 @@
 import React, { useEffect, useState } from "react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@nextui-org/table";
 import { User } from "@nextui-org/user";
-import { Chip, ChipProps } from "@nextui-org/chip";
-import { Tooltip } from "@nextui-org/tooltip";
+import { ChipProps } from "@nextui-org/chip";
 import { Skeleton } from "@nextui-org/skeleton";
-import { Badge as BadgeUI } from "@nextui-org/badge";
 import { Badge } from "./ui/badge";
 import { useRouter } from "next/navigation";
-import { Avatar } from "@nextui-org/avatar";
-
-/* import { EditIcon } from "./EditIcon";
-import { DeleteIcon } from "./DeleteIcon";
-import { EyeIcon } from "./EyeIcon";
-import { columns, users } from "./data"; */
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
     active: "success",
@@ -46,14 +38,14 @@ export default function ConversationsListNew({ convData, session }: { convData: 
                     </TableHeader>
                     <TableBody>
                         {convData.map((conv: any, index: any) => (
-                            <TableRow data-hover key={index} onClick={() => {
+                            <TableRow className="flex items-center justify-between" data-hover key={index} onClick={() => {
                                 router.push(`/messages/${session?.user.id === conv.userOneId ? conv.userTwo.id : conv.userOne.id}`)
                             }}>
-                                <TableCell className="flex justify-center">
+                                <TableCell className="flex">
                                     {session?.user.id === conv.userOneId ?
                                         <User
                                             name={session?.user.id === conv.userOneId ? conv.userTwo.username : conv.userOne.username}
-                                            description="Product Designer"
+                                            description={conv.userTwo.profile.region}
                                             avatarProps={{
                                                 color: conv.userTwo.isOnline ? "success" : "default",
                                                 src: session?.user.id === conv.userOneId ? conv.userTwo.profile.imageUrl : conv.userOne.profile.imageUrl
@@ -61,7 +53,7 @@ export default function ConversationsListNew({ convData, session }: { convData: 
                                         /> :
                                         <User
                                             name={session?.user.id === conv.userOneId ? conv.userTwo.username : conv.userOne.username}
-                                            description="Product Designer"
+                                            description={conv.userOne.profile.region}
                                             avatarProps={{
                                                 isBordered: true,
                                                 color: conv.userOne.isOnline ? "success" : "default",
@@ -71,7 +63,7 @@ export default function ConversationsListNew({ convData, session }: { convData: 
                                 </TableCell>
                                 <TableCell>
                                     {conv.messages.map((lastmessage: any) => {
-                                        return lastmessage.content.length > MAX_LENGTH ? lastmessage.content.substring(0, MAX_LENGTH) + "..." : lastmessage.content;
+                                        return lastmessage.content.length > MAX_LENGTH ? <div className="flex justify-start">{lastmessage.content.substring(0, MAX_LENGTH) + "..."}</div> : <div className="flex justify-start">{lastmessage.content}</div>;
                                     })}
                                 </TableCell>
                                 <TableCell>
