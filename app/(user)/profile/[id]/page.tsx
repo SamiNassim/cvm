@@ -1,14 +1,6 @@
-
-/* const userInfo = async () => {
-    const result = await fetch('http://localhost:3000/api/profile', { method: 'GET' });
-
-    return result;
-} */
-
-// Params doc : https://nextjs.org/docs/app/api-reference/functions/generate-static-params
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import { getAge } from "@/lib/age-calculator";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { Mail, Pencil } from "lucide-react";
@@ -24,18 +16,6 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
             profile: true,
         },
     })
-
-
-    function getAge(dateString: string) {
-        var today = new Date();
-        var birthDate = new Date(dateString);
-        var age = today.getFullYear() - birthDate.getFullYear();
-        var m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        return age;
-    }
 
     const session = await getServerSession(authOptions);
     const userAge = getAge(userInfo?.profile.dob!);

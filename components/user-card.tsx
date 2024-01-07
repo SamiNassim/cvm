@@ -1,7 +1,8 @@
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
+import { Card, CardHeader, CardBody } from "@nextui-org/card";
 import { Avatar } from "@nextui-org/avatar";
 import { Button } from "@nextui-org/button";
 import { Link } from "@nextui-org/link";
+import { getAge } from "@/lib/age-calculator";
 
 interface UserCardProps {
     userId: string,
@@ -25,17 +26,6 @@ export default function UserCard({
     dob,
     isOnline,
     bio }: UserCardProps) {
-
-    function getAge(dateString: string) {
-        var today = new Date();
-        var birthDate = new Date(dateString);
-        var age = today.getFullYear() - birthDate.getFullYear();
-        var m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        return age;
-    }
 
     const userAge = getAge(dob!);
 

@@ -18,7 +18,7 @@ import {
 import { Button } from "../ui/button";
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { format, parseISO } from "date-fns";
+import { parseISO } from "date-fns";
 import { Textarea } from "../ui/textarea";
 import { toast } from "../ui/use-toast";
 import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
