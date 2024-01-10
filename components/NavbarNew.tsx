@@ -20,7 +20,6 @@ export default function NavbarNew(session: any) {
 
     const currentTheme = theme === 'system' ? systemTheme : theme;
     const handleThemeSwitch = () => { currentTheme === "dark" ? setTheme("light") : setTheme("dark") }
-    console.log(session.session)
 
     useEffect(() => {
         const unreadMessages = fetch("/api/messages/unread", {
@@ -32,8 +31,32 @@ export default function NavbarNew(session: any) {
                 console.log(data)
                 setUnreadMessages(data)
             })
-            .catch(error => console.log("[OFFLINE PUT ERROR]", error))
+            .catch(error => console.log("[UNREAD GET ERROR]", error))
     }, [])
+
+    const goOffline = () => {
+
+        fetch("/api/user/offline", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" }
+        })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.log("[OFFLINE PATCH ERROR]", error))
+
+    }
+
+    if (session && typeof window !== "undefined") {
+        useEffect(() => {
+            document.onvisibilitychange = () => {
+                if (document.visibilityState === "hidden") {
+                    goOffline()
+                }
+            };
+            addEventListener("beforeunload", goOffline)
+
+        }, [document.onvisibilitychange])
+    }
 
     return (
         <Navbar onMenuOpenChange={setIsMenuOpen}>
