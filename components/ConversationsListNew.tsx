@@ -14,7 +14,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
     vacation: "warning",
 };
 
-export default function ConversationsListNew({ convData, session }: { convData: any, session: any }) {
+export default function ConversationsList({ convData, session }: { convData: any, session: any }) {
 
     const [isLoading, setIsLoading] = useState(true);
 
