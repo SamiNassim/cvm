@@ -1,4 +1,3 @@
-import Navbar from '@/components/Navbar'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -8,6 +7,7 @@ import { SocketProvider } from '@/components/providers/socket-provider'
 import { QueryProvider } from '@/components/providers/query-provider'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { NextUIProviders } from '@/components/providers/nextui-provider'
+import NavbarPage from '@/components/navbar-page'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -35,7 +35,7 @@ export default async function RootLayout({
               <QueryProvider>
                 <NextUIProviders>
                   <main className='flex flex-col justify-center items-center'>
-                    <Navbar />
+                    <NavbarPage />
                     {children}
                   </main>
                 </NextUIProviders>

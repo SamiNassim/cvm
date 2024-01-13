@@ -1,4 +1,4 @@
-import { SocketIndicator } from "@/components/SocketIndicator";
+import { SocketIndicator } from "@/components/socket-indicator";
 import { ChatInput } from "@/components/chat/chat-input";
 import { ChatMessages } from "@/components/chat/chat-messages";
 import { authOptions } from "@/lib/auth";
